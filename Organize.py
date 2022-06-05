@@ -6,7 +6,7 @@ path = input("Enter the path : ")
 files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
 
 def get_season(filename:str):
-    pattern_regex = r"(\b[Ss]([0-9]*))"
+    pattern_regex = r"([Ss](\d+))"
     a=re.findall(pattern_regex, filename)
     if len(a) > 0:
         return "S"+str("{:02d}".format(int(a[0][1])))
