@@ -1,11 +1,9 @@
 import os
 import shutil
-from os.path import isfile, join
 import re
 
 path = input("Enter the path : ")
-files = [f for f in os.listdir(path) if isfile(join(path, f))]
-
+files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
 
 def get_season(filename:str):
     pattern_regex = r"(\b[Ss]([0-9]*))"
