@@ -17,18 +17,17 @@ def get_resolution(filename:str):
     pattern_regex = r"((480|1080|720|2160)[Pp])"
     a=re.findall(pattern_regex, filename)
     if len(a) > 0:
-        return a[0][0].upper()
+        return a[0][0].lower()
     else:
         return None
 
 def get_encode(filename:str):
     text = ""
-    pattern_regex = r"([Xx]265)"
-    if re.search(pattern_regex,filename) != None:
+    if re.search("[Xx]265",filename) != None:
         text+="X265"
     if re.search(r"(10.?[Bb][Ii][Tt])",filename) or re.search(r"[Hh][Ee][Vv][Cc]",filename) != None:
-        text+=" 10bit" if text != "" else "10bit"
-    else:
+        text+=" 10Bit" if text != "" else "10Bit"
+    if text =="":
         return None
     return text
 
@@ -84,11 +83,8 @@ def create_folder_resolution(files:list):
         resolution = get_resolution(i)
         encodes= get_encode(i)
         if resolution != None:
-            newpath = path+f"/{resolution}"
-        if encodes != None:
-            resolution += f" {encodes}"
+            newpath = resolution
 
-        encodes= get_encode(i)
         if encodes != None:
             newpath += f" {encodes}"
 
@@ -97,7 +93,7 @@ def create_folder_resolution(files:list):
             gtype= get_type(i)
             if gtype != None:
                 season += f"/{gtype}"   
-            new = path+f"/{season}/{resolution}"
+            new = path+f"/{season}/{newpath}"
             if os.path.exists(new) != True:
                 os.mkdir(new)
 
@@ -107,7 +103,10 @@ def move_files(files:list):
         if os.path.exists(newpath) == True:
             shutil.move(path+f"/{i}",newpath+f"/{i}")
 
-create_folder_season(files)
-create_folder_type(files)
-create_folder_resolution(files)
-move_files(files)
+if files != []:
+    create_folder_season(files)
+    create_folder_type(files)
+    create_folder_resolution(files)
+    move_files(files)
+else:
+    print("No files found")
