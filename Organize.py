@@ -5,6 +5,11 @@ import re
 path = input("Enter the path : ")
 files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
 
+def get_serials(file:list):
+    for i in file:
+        if re.search(r"([Ss]\d+)",i) == None:
+            files.remove(i)
+
 def get_season(filename:str):
     pattern_regex = r"([Ss](\d+))"
     a=re.findall(pattern_regex, filename)
@@ -104,6 +109,7 @@ def move_files(files:list):
             shutil.move(path+f"/{i}",newpath+f"/{i}")
 
 if files != []:
+    get_serials(files)
     create_folder_season(files)
     create_folder_type(files)
     create_folder_resolution(files)
